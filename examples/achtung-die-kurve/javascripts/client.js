@@ -9,7 +9,7 @@ function connectToHost() {
 		var gameId = document.getElementById("game").value;
 		var name = document.getElementById("name").value;
 	
-		client = new Handshake.Client("handshake-server.heroku.com", 10000, gameId);
+		client = new Handshake.Client("10.254.0.66", 10000, gameId);
 	
 		client.on("selfReady", function(id) {
 			console.log("connected to game " + gameId + " with id " + id);
@@ -33,13 +33,6 @@ var setDirection = function(dir) {
 
 var handleIphoneMotion = function(event) {
 	var direction = event.accelerationIncludingGravity.y
-	if(direction > 0.5) {
-		direction = 1;
-	} else if(direction < -0.5) {
-		direction = -1;
-	} else {
-		direction = 0;
-	}
 	setDirection(direction);
 }
 
@@ -62,10 +55,7 @@ var handleKeyUp = function(event) {
 
 var setupControlListener = function() {
 	// IPHONE ACCELERATOR
-	if(window.ondevicemotion) {
-		window.ondevicemotion = handleIphoneMotion;
-	} else {
-		window.onkeydown = handleKeyDown;
-		window.onkeyup = handleKeyUp;
-	}
+	window.ondevicemotion = handleIphoneMotion;
+	window.onkeydown = handleKeyDown;
+	window.onkeyup = handleKeyUp;
 }
