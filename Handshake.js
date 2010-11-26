@@ -206,12 +206,10 @@ Handshake.Communicator = Basic.Class.extend({
 
 		if(!this.websocket || 
 			(this.websocket && this.websocket.readyState == this.websocketStates.CLOSED)) {
-
+			var connectUrl = "ws://" + this.serverIp + ":" + this.port + "/" + this.requestString
+			console.log("connecting via: " + connectUrl);
 			// try to connect to given server and port with the request string	
-			this.websocket = new WebSocket("ws://" + 
-																		 this.serverIp + ":" + 
-																		 this.port + "/" + 
-																		 this.requestString);
+			this.websocket = new WebSocket(connectUrl);
 
 			// publish websocket events
 			var communicator = this;

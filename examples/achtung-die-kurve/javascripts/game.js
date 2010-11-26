@@ -262,7 +262,7 @@
 	 * be registered as handlers.
 	 */
 
-		var gameHost = new Handshake.Host("handshake-server.heroku.com", 8080);
+		var gameHost = new Handshake.Host("multimediatechnology.at", 8008);
 		// basic standard events defined by Handshake
 		
 		gameHost.on("selfReady", function(hostId) {
