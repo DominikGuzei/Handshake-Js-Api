@@ -262,55 +262,59 @@
 	 * be registered as handlers.
 	 */
 
-		var gameHost = new Handshake.Host("multimediatechnology.at", 8008);
-		// basic standard events defined by Handshake
-		
-		gameHost.on("selfReady", function(hostId) {
-			console.log("game started with id: " + hostId);
+		require({ baseUrl: "../../scripts" }, ['handshake/Host'], function(Host) {
+							
+			var gameHost = new Host("localhost", 8008);
+			// basic standard events defined by Handshake
+
+			gameHost.on("selfReady", function(hostId) {
+				console.log("game started with id: " + hostId);
+			});
+
+			gameHost.on("selfDisconnect", function(event) {
+				console.log("Handshake Server closed connection");
+			});
+
+			gameHost.on("clientConnect", function(client) {
+				console.log("client " + client.id + " connected with device: " + client.deviceType);
+			});
+
+			gameHost.on("clientDisconnect", function(client) {
+				console.log("client " + client.id + " disconnected");
+			});
+
+			// custom events specific for this game
+
+			/**
+			 * Handle a custom message, sent by the clients
+			 * to set the name of the player
+			 *
+			 * Achtung die Kurve needs names for its players
+			 * it would not make sense to build this feature
+			 * into the connect request because this could
+			 * make the request fail on certain conditions
+			 * e.g: there are no spaces allowed in request urls
+			 */
+
+			gameHost.on("clientName", function(event) {
+				var client = gameHost.getClient(event.sender);
+
+				// save the name for each client
+				client.name = event.data.name;
+				// save the achtung die kurve player id
+				client.playerId = addPlayer(client.name, -1);
+			});
+
+			/**
+			 * Handle client direction changes
+			 */
+			gameHost.on("clientDirection", function(event) {
+				var client = gameHost.getClient(event.sender);
+				// change direction of player
+				currentDirections[client.playerId] = event.data.direction;
+			});
+
+			gameHost.connect();
 		});
 		
-		gameHost.on("selfDisconnect", function(event) {
-			console.log("Handshake Server closed connection");
-		});
-		
-		gameHost.on("clientConnect", function(client) {
-			console.log("client " + client.id + " connected with device: " + client.deviceType);
-		});
-		
-		gameHost.on("clientDisconnect", function(client) {
-			console.log("client " + client.id + " disconnected");
-		});
-		
-		// custom events specific for this game
-	
-		/**
-		 * Handle a custom message, sent by the clients
-		 * to set the name of the player
-		 *
-		 * Achtung die Kurve needs names for its players
-		 * it would not make sense to build this feature
-		 * into the connect request because this could
-		 * make the request fail on certain conditions
-		 * e.g: there are no spaces allowed in request urls
-		 */
-		
-		gameHost.on("clientName", function(event) {
-			var client = gameHost.getClient(event.sender);
-			
-			// save the name for each client
-			client.name = event.data.name;
-			// save the achtung die kurve player id
-			client.playerId = addPlayer(client.name, -1);
-		});
-		
-		/**
-		 * Handle client direction changes
-		 */
-		gameHost.on("clientDirection", function(event) {
-			var client = gameHost.getClient(event.sender);
-			// change direction of player
-			currentDirections[client.playerId] = event.data.direction;
-		});
-		
-		gameHost.connect();
 })();
