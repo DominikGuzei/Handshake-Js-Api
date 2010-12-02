@@ -3,16 +3,20 @@ require({ baseUrl: "../../scripts" }, ['handshake/Client'], function(Client) {
 	var client = undefined;
 	var connected = false;
 	var currentDirection = 0;
-
+	
+	require.ready(function() {
+		var connectButton = document.getElementById("connect");
+		connectButton.addEventListener('click', connectToHost);
+	});
+	
 	function connectToHost() {
 		if(!connected) {
-			var server = document.getElementById("server").value;
 			var gameId = document.getElementById("game").value;
 			var name = document.getElementById("name").value;
 	
-			client = new Client("localhost", 8008, gameId);
+			client = new Client("193.170.119.85", 8008, gameId);
 	
-			client.on("selfReady", function(id) {
+			client.on("ready", function(id) {
 				console.log("connected to game " + gameId + " with id " + id);
 				client.send("host", "clientName", { name: name });
 			});

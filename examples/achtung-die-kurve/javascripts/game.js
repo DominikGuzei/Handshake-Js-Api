@@ -84,7 +84,7 @@
             //game.restart();
             game.startSession();
             startCurrentDirectionsProcess();
-						gameHost.send("all", "gameStart", {});
+			gameHost.send("all", "gameStart", {});
         },
         addPlayer = function(name, controlID) {
             player = {};
@@ -261,17 +261,17 @@
 	 * are published as events so that arbitrary functions can
 	 * be registered as handlers.
 	 */
-
+	 var gameHost;
 		require({ baseUrl: "../../scripts" }, ['handshake/Host'], function(Host) {
 							
-			var gameHost = new Host("localhost", 8008);
+			gameHost = new Host("193.170.119.85", 8008);
 			// basic standard events defined by Handshake
 
-			gameHost.on("selfReady", function(hostId) {
+			gameHost.on("ready", function(hostId) {
 				console.log("game started with id: " + hostId);
 			});
 
-			gameHost.on("selfDisconnect", function(event) {
+			gameHost.on("closed", function(event) {
 				console.log("Handshake Server closed connection");
 			});
 

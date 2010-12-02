@@ -14,13 +14,13 @@ define(['basic/Class', 'handshake/Communicator'],
 				this.on("connect", function(event) {
 					if(event.sender == "server") {
 						// server sends client id
-						self.id = event.data;
-						self.fire("selfReady", self.id);
+						self.id = event.data.id;
+						self.fire("ready", self.id);
 					}
 				});
 
 				this.on("websocketClose", function(event) {
-					self.fire("selfDisconnect", event);
+					self.fire("closed", event);
 				});
 
 				this.on("exception", function(event) {

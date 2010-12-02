@@ -17,7 +17,7 @@ define(['basic/Class', 'handshake/Communicator'],
 				
 						// server sends host id
 						Host.id = event.data.id;
-						Host.fire("selfReady", Host.id);
+						Host.fire("ready", Host.id);
 				
 					} else {
 				
@@ -43,7 +43,7 @@ define(['basic/Class', 'handshake/Communicator'],
 				});
 		
 				this.on("websocketClose", function(event) {
-					Host.fire("selfDisconnect", event);
+					Host.fire("closed", event);
 				});
 		
 				this.on("exception", function(event) {
